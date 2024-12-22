@@ -64,7 +64,7 @@ const string kWifiSettingsPath = "wfcsettings.bin";
 extern Net net;
 
 
-EmuInstance::EmuInstance(int inst) : deleting(false),
+EmuInstance::EmuInstance(int inst, bool texupport) : deleting(false),
     instanceID(inst),
     globalCfg(Config::GetGlobalTable()),
     localCfg(Config::GetLocalTable(inst))
@@ -148,6 +148,22 @@ EmuInstance::EmuInstance(int inst) : deleting(false),
         if (enable)
             createWindow(i);
     }
+    
+    if (texupport) {
+        if(numWindows == 1) {
+		    createWindow(); //second window for true dual screen
+        }
+
+        //hide 1st screen, force it to 1st physical screen, and fullscreen it
+        windowList[0]->hide();
+        windowList[0]->windowHandle()->setScreen(QGuiApplication::screens()[0]);
+        windowList[0]->showFullScreen();
+
+        //hide 2nd screen, move it to the other screen, and fullscreen it
+        windowList[1]->hide();
+        windowList[1]->windowHandle()->setScreen(QGuiApplication::screens()[1]);
+        windowList[1]->showFullScreen();
+	}
 }
 
 EmuInstance::~EmuInstance()
@@ -220,7 +236,57 @@ void EmuInstance::createWindow(int id)
     doOnAllWindows([=](MainWindow* win)
     {
         win->actNewWindow->setEnabled(enable);
+        win->actSwapWindows->setEnabled((numWindows == 2)); //restrict to exactly 2 windows for now
     });
+
+    //texupport - add option later
+    /* //moved logic to appropriate spot in the initialization
+    if(id == 0) {
+        win->showFullScreen();
+    } else if(id == 1) {
+        win->windowHandle()->setScreen(QGuiApplication::screens()[0]);
+        win->showFullScreen();
+    }
+    */
+}
+
+void EmuInstance::swapWindows(int screenA, int screenB)
+{
+    bool isScreenAFull = false;
+    bool isScreenBFull = false;
+
+    if (!windowList[screenA] || !windowList[screenB])
+        return;
+
+    if (windowList[screenA]->isFullScreen()) {
+        windowList[screenA]->toggleFullscreen();
+        isScreenAFull = true;
+    }
+    if (windowList[screenB]->isFullScreen()) {
+        windowList[screenB]->toggleFullscreen();
+        isScreenBFull = true;
+    }
+
+    windowList[screenA]->hide();
+    windowList[screenB]->hide();
+
+    QScreen* curScreenA = windowList[screenA]->windowHandle()->screen();
+    QScreen* curScreenB = windowList[screenB]->windowHandle()->screen();
+
+    windowList[screenA]->windowHandle()->setScreen(curScreenB);
+    windowList[screenB]->windowHandle()->setScreen(curScreenA);
+    
+    if (isScreenAFull) {
+        windowList[screenA]->showFullScreen();
+    } else {
+        windowList[screenA]->show();
+    }
+
+    if (isScreenBFull) {
+        windowList[screenB]->showFullScreen();
+    } else {
+        windowList[screenB]->show();
+    }
 }
 
 void EmuInstance::deleteWindow(int id, bool close)
@@ -258,6 +324,7 @@ void EmuInstance::deleteWindow(int id, bool close)
         doOnAllWindows([=](MainWindow* win)
         {
             win->actNewWindow->setEnabled(enable);
+            win->actSwapWindows->setEnabled((numWindows == 2)); //restrict to exactly 2 windows for now
         });
     }
 }

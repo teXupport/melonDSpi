@@ -594,6 +594,9 @@ MainWindow::MainWindow(int id, EmuInstance* inst, QWidget* parent) :
             actNewWindow = menu->addAction("Open new window");
             connect(actNewWindow, &QAction::triggered, this, &MainWindow::onOpenNewWindow);
 
+            actSwapWindows = menu->addAction("Swap physical screens");
+            connect(actSwapWindows, &QAction::triggered, this, &MainWindow::onSwapWindows);
+
             menu->addSeparator();
 
             actScreenFiltering = menu->addAction("Screen filtering");
@@ -1743,7 +1746,7 @@ void MainWindow::onOpenTitleManager()
 
 void MainWindow::onMPNewInstance()
 {
-    createEmuInstance();
+    createEmuInstance(false);
 }
 
 void MainWindow::onLANStartHost()
@@ -2105,6 +2108,13 @@ void MainWindow::onChangeIntegerScaling(bool checked)
 void MainWindow::onOpenNewWindow()
 {
     emuInstance->createWindow();
+}
+
+void MainWindow::onSwapWindows()
+{
+    emuInstance->swapWindows(0, 1);
+
+    emit screenLayoutChange();
 }
 
 void MainWindow::onChangeScreenFiltering(bool checked)

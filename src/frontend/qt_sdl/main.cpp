@@ -118,7 +118,7 @@ void NetInit()
 }
 
 
-bool createEmuInstance()
+bool createEmuInstance(bool texupport)
 {
     int id = -1;
     for (int i = 0; i < kMaxEmuInstances; i++)
@@ -133,7 +133,7 @@ bool createEmuInstance()
     if (id == -1)
         return false;
 
-    auto inst = new EmuInstance(id);
+    auto inst = new EmuInstance(id, texupport);
     emuInstances[id] = inst;
 
     return true;
@@ -349,7 +349,7 @@ int main(int argc, char** argv)
 
     NetInit();
 
-    createEmuInstance();
+    createEmuInstance(options->texupport);
 
     {
         MainWindow* win = emuInstances[0]->getMainWindow();

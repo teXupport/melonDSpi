@@ -395,7 +395,7 @@ bool ScreenPanel::event(QEvent* event)
 
 void ScreenPanel::showCursor()
 {
-    mainWindow->panel->setCursor(Qt::ArrowCursor);
+    mainWindow->panel->setCursor(Qt::CrossCursor); //replaced Arrow - texupport
     mouseTimer->start();
 }
 

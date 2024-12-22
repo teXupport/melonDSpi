@@ -41,6 +41,7 @@ enum
     HK_FullscreenToggle,
     HK_SwapScreens,
     HK_SwapScreenEmphasis,
+    HK_SwapPhysicalScreens,
     HK_SolarSensorDecrease,
     HK_SolarSensorIncrease,
     HK_FrameStep,
@@ -78,7 +79,7 @@ int getEventKeyVal(QKeyEvent* event);
 class EmuInstance
 {
 public:
-    EmuInstance(int inst);
+    EmuInstance(int inst, bool texupport);
     ~EmuInstance();
 
     int getInstanceID() { return instanceID; }
@@ -102,6 +103,7 @@ public:
     std::string instanceFileSuffix();
 
     void createWindow(int id = -1);
+    void swapWindows(int screenA = 0, int screenB = 1);
     void deleteWindow(int id, bool close);
     void deleteAllWindows();
 
