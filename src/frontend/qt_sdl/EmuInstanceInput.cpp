@@ -46,6 +46,7 @@ const char* EmuInstance::hotkeyNames[HK_MAX] =
     "HK_Mic",
     "HK_Pause",
     "HK_Reset",
+    "HK_Exit",
     "HK_FastForward",
     "HK_FrameLimitToggle",
     "HK_FullscreenToggle",

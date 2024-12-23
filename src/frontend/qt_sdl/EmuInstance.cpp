@@ -238,16 +238,6 @@ void EmuInstance::createWindow(int id)
         win->actNewWindow->setEnabled(enable);
         win->actSwapWindows->setEnabled((numWindows == 2)); //restrict to exactly 2 windows for now
     });
-
-    //texupport - add option later
-    /* //moved logic to appropriate spot in the initialization
-    if(id == 0) {
-        win->showFullScreen();
-    } else if(id == 1) {
-        win->windowHandle()->setScreen(QGuiApplication::screens()[0]);
-        win->showFullScreen();
-    }
-    */
 }
 
 void EmuInstance::swapWindows(int screenA, int screenB)

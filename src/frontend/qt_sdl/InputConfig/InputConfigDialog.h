@@ -46,6 +46,7 @@ static constexpr std::initializer_list<int> hk_general =
 {
     HK_Pause,
     HK_Reset,
+    HK_Exit,
     HK_FrameStep,
     HK_FastForward,
     HK_FastForwardToggle,
@@ -67,6 +68,7 @@ static constexpr std::initializer_list<const char*> hk_general_labels =
 {
     "Pause/resume",
     "Reset",
+    "Exit melonDS",
     "Frame step",
     "Fast forward",
     "Toggle fast forward",
