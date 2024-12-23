@@ -79,6 +79,7 @@ void EmuThread::attachWindow(MainWindow* window)
     connect(this, SIGNAL(windowFullscreenToggle()), window, SLOT(onFullscreenToggled()));
     connect(this, SIGNAL(screenEmphasisToggle()), window, SLOT(onScreenEmphasisToggled()));
     connect(this, SIGNAL(swapWindowsToggle()), window, SLOT(onSwapWindows()));
+    connect(this, SIGNAL(onQuitHotkey()), window, SLOT(onQuit()));
 
     if (window->winHasMenu())
     {
@@ -98,6 +99,7 @@ void EmuThread::detachWindow(MainWindow* window)
     disconnect(this, SIGNAL(windowFullscreenToggle()), window, SLOT(onFullscreenToggled()));
     disconnect(this, SIGNAL(screenEmphasisToggle()), window, SLOT(onScreenEmphasisToggled()));
     disconnect(this, SIGNAL(swapWindowsToggle()), window, SLOT(onSwapWindows()));
+    disconnect(this, SIGNAL(onQuitHotkey()), window, SLOT(onQuit()));
 
     if (window->winHasMenu())
     {
@@ -162,7 +164,7 @@ void EmuThread::run()
 
         if (emuInstance->hotkeyPressed(HK_Pause)) emuTogglePause();
         if (emuInstance->hotkeyPressed(HK_Reset)) emuReset();
-        if (emuInstance->hotkeyPressed(HK_Exit)) emuExit();
+        if (emuInstance->hotkeyPressed(HK_Exit)) emit onQuitHotkey();
         if (emuInstance->hotkeyPressed(HK_FrameStep)) emuFrameStep();
 
         if (emuInstance->hotkeyPressed(HK_FullscreenToggle)) emit windowFullscreenToggle();

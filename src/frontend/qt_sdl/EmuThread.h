@@ -144,6 +144,7 @@ signals:
     void windowEmuStop();
     void windowEmuPause(bool pause);
     void windowEmuReset();
+    void onQuitHotkey();
 
     void windowLimitFPSChange();
 
